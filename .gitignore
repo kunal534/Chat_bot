@@ -20,22 +20,29 @@
 # production
 /build
 
-# misc
+# OS-specific files
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE settings
+.vscode/
+
+# SSL certificates (if any)
 *.pem
 
-# debug
+# debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# environment variables
 .env*
 
-# vercel
+# Vercel deployment files
 .vercel
 
-# typescript
+# TypeScript build info
 *.tsbuildinfo
 next-env.d.ts
