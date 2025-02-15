@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Next.js RAG Chatbot (Meta Llama) 
 
-## Getting Started
+A **Retrieval-Augmented Generation (RAG) Chatbot** built with **Next.js**, **LangChain.js**, **Redis**, and **Meta Llama**. This chatbot enhances responses by retrieving relevant contextual data before generating answers.   
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📂 Project Structure  
+
+```plaintext
+📁 my-chatbot-project
+│-- 📂 src
+│   ├── 📂 app
+│   │   ├── 📂 [...url]  # Dynamic route for chat sessions
+│   │   ├── 📂 api      # API routes
+│   │   ├── 📜 layout.tsx
+│   │   ├── 📜 page.tsx
+│   ├── 📂 components  # Reusable React components
+│   ├── 📂 lib         # Utility functions (RAG, Redis)
+│   ├── 📂 styles      # Styling (CSS, Tailwind, etc.)
+│-- .gitignore
+│-- package.json
+│-- next.config.js
+│-- README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Installation & Setup  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1️⃣ Clone the repository  
+```sh
+git clone https://github.com/kunal534/Chat_bot.git 
+cd YOUR_REPO
+```
 
-## Learn More
+### 2️⃣ Install dependencies  
+```sh
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3️⃣ Set up environment variables  
+Create a `.env.local` file and add:  
+```env
+OPENAI_API_KEY=your_openai_api_key 
+REDIS_URL=your_redis_url 
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4️⃣ Run the development server  
+```sh
+npm run dev
+```
+Your chatbot should now be running at **http://localhost:3000** 🎉  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend:** Next.js, React  
+- **Backend:** Next.js API routes  
+- **AI Model:** Meta Llama for response generation  
+- **Database:** Redis for caching and session management  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🔧 Features  
+
+✅ Supports RAG-based responses  
+✅ Stores chat history in Redis  
+✅ Handles multi-session conversations  
+✅ Supports dynamic URL-based contexts  
+✅ Easy to deploy on Vercel or Railway  
+
+---
+
+## 🚀 Deployment  
+
+### Deploy to Vercel  
+```sh
+vercel
+```
+
+### Deploy to Railway  
+```sh
+railway up
+```
+
+---
+
+## 🤝 Contributing  
+Feel free to submit PRs or report issues!  
+
+---
+
+## 📜 License  
+This project is licensed under **MIT**.  
