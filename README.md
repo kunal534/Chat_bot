@@ -79,18 +79,3 @@ Your chatbot should now be running at **http://localhost:3000** 🎉
 ```sh
 vercel
 ```
-
-### Deploy to Railway  
-```sh
-railway up
-```
-
----
-
-## 🤝 Contributing  
-Feel free to submit PRs or report issues!  
-
----
-
-## 📜 License  
-This project is licensed under **MIT**.  
