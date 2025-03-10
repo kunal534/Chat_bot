@@ -1,7 +1,7 @@
 # 🚀 Next.js RAG Chatbot (Meta Llama) 
 
 A **Retrieval-Augmented Generation (RAG) Chatbot** built with **Next.js**, **LangChain.js**, **Redis**, and **Meta Llama**. This chatbot enhances responses by retrieving relevant contextual data before generating answers.   
-
+🔗 Project Publication: [Publication Link](https://app.readytensor.ai/publications/null-ElCDzXvDFNMs)
 ---
 
 ## 📂 Project Structure  
