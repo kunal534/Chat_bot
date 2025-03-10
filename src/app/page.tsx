@@ -1,101 +1,254 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+export default function WelcomePage() {
+    const [url, setUrl] = useState("");
+    const [isValid, setIsValid] = useState<boolean | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [demoStep, setDemoStep] = useState(0);
+    const router = useRouter();
+
+    // Validate Wikipedia URL
+    const validateUrl = (input: string) => {
+        try {
+            const urlObj = new URL(input);
+            const isWikipedia = urlObj.hostname.includes("wikipedia.org");
+            setIsValid(isWikipedia);
+            return isWikipedia;
+        } catch {
+            setIsValid(input === "" ? null : false);
+            return false;
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newUrl = e.target.value;
+        setUrl(newUrl);
+        validateUrl(newUrl);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (isValid && url) {
+            setIsSubmitting(true);
+            router.push(`/${encodeURIComponent(url)}`);
+        }
+    };
+
+    // Demo sequence
+    const demoMessages = [
+        { question: "What’s this page about? 🤔", answer: "A summary of Artificial Intelligence! 📝" },
+        { question: "Key milestones? ⏳", answer: "AI’s big moments from the page! 🚀" },
+        { question: "Explain neural networks. 🧠", answer: "Straight from Wikipedia, simplified! ✨" },
+    ];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDemoStep((prev) => (prev + 1) % demoMessages.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <>
+            <div
+                style={{
+                    height: "100vh",
+                    width: "100vw",
+                    background: "#1a1a1a",
+                    color: "#e0e0e0",
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    overflowY: "auto",
+                    fontFamily: "Arial, sans-serif",
+                }}
+            >
+                {/* Globe Background Effect */}
+                <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "100vw",
+                        height: "100vw",
+                        maxWidth: "1200px",
+                        maxHeight: "1200px",
+                        background: "radial-gradient(circle, rgba(76, 175, 80, 0.2) 0%, rgba(26, 26, 26, 0) 70%)",
+                        transform: "translate(-50%, -50%)",
+                        animation: "pulse 6s ease-in-out infinite",
+                        pointerEvents: "none",
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "80vw",
+                        height: "80vw",
+                        maxWidth: "800px",
+                        maxHeight: "800px",
+                        borderRadius: "50%",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        transform: "translate(-50%, -50%)",
+                        animation: "spin 20s linear infinite",
+                        pointerEvents: "none",
+                    }}
+                />
+
+                {/* Content Container */}
+                <div
+                    style={{
+                        position: "relative",
+                        zIndex: 1,
+                        padding: "40px",
+                        maxWidth: "800px",
+                        margin: "0 auto",
+                        textAlign: "center",
+                    }}
+                >
+                    {/* Header with Fade-In and Rotating Icon */}
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "15px",
+                            marginBottom: "30px",
+                            animation: "fadeIn 1s ease-out",
+                        }}
+                    >
+                        <svg
+                            width="40"
+                            height="40"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#4caf50"
+                            strokeWidth="2"
+                            style={{ animation: "spin 4s linear infinite" }}
+                        >
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                        <h1 style={{ fontSize: "2.5rem", color: "#fff", fontWeight: "bold" }}>
+                            Wikipedia Power Reader 🌟
+                        </h1>
+                    </div>
+                    <p style={{ fontSize: "1.2rem", color: "#b0b0b0", marginBottom: "40px", animation: "fadeIn 1.2s ease-out" }}>
+                        Turn any Wikipedia page into a smart Q&A buddy! Ask away and skip the scroll. 📚✨
+                    </p>
+
+                    {/* Demo Section with Slide-In */}
+                    <div style={{ marginBottom: "40px", animation: "slideInLeft 1s ease-out" }}>
+                        <p style={{ fontSize: "1.1rem", color: "#d0d0d0", marginBottom: "15px" }}>
+                            Watch it work 👀:
+                        </p>
+                        <p style={{ fontStyle: "italic", color: "#888" }}>
+                            URL:{" "}
+                            <a href="/https://en.wikipedia.org/wiki/Artificial_intelligence" style={{ color: "#4caf50" }}>
+                                en.wikipedia.org/wiki/Artificial_intelligence
+                            </a>
+                        </p>
+                        <div style={{ marginTop: "20px", minHeight: "60px" }}>
+                            <p style={{ fontSize: "1rem", color: "#4caf50", margin: "5px 0" }}>
+                                {demoMessages[demoStep].question}
+                            </p>
+                            <p style={{ fontSize: "1rem", color: "#76ff03", margin: "5px 0" }}>
+                                {demoMessages[demoStep].answer}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Input Form with Bounce-In */}
+                    <form onSubmit={handleSubmit} style={{ animation: "bounceInUp 1s ease-out" }}>
+                        <input
+                            type="text"
+                            value={url}
+                            onChange={handleChange}
+                            placeholder="e.g., https://en.wikipedia.org/wiki/Space"
+                            disabled={isSubmitting}
+                            style={{
+                                width: "100%",
+                                maxWidth: "500px",
+                                padding: "12px",
+                                fontSize: "1rem",
+                                border: `2px solid ${
+                                    isValid === null ? "#555" : isValid ? "#4caf50" : "#ff5252"
+                                }`,
+                                borderRadius: "6px",
+                                boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+                                marginBottom: "15px",
+                                background: "#2a2a2a",
+                                color: "#e0e0e0",
+                            }}
+                        />
+                        <button
+                            type="submit"
+                            disabled={!isValid || isSubmitting}
+                            style={{
+                                padding: "12px 30px",
+                                fontSize: "1rem",
+                                backgroundColor: isSubmitting ? "#555" : "#4caf50",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "6px",
+                                cursor: isValid && !isSubmitting ? "pointer" : "not-allowed",
+                                boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+                                transition: "transform 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.transform = "scale(1.05)")}
+                            onMouseLeave={(e) => !isSubmitting && (e.currentTarget.style.transform = "scale(1)")}
+                        >
+                            {isSubmitting ? "Loading... ⏳" : "Chat Now 🚀"}
+                        </button>
+                    </form>
+                    {isValid === false && (
+                        <p style={{ color: "#ff5252", fontSize: "0.9rem", marginTop: "10px", animation: "fadeIn 0.5s ease-out" }}>
+                            Oops! Please use a valid Wikipedia URL. 🙈
+                        </p>
+                    )}
+
+                    {/* Why Section with Fade-In */}
+                    <div style={{ marginTop: "40px", animation: "fadeIn 1.4s ease-out" }}>
+                        <h2 style={{ fontSize: "1.6rem", color: "#fff", marginBottom: "20px" }}>
+                            Why This Rocks 🎉
+                        </h2>
+                        <ul style={{ listStyle: "none", padding: 0, color: "#b0b0b0", fontSize: "1rem" }}>
+                            <li>🎯 <strong>Spot-on Answers:</strong> Only from the page—no random guesses!</li>
+                            <li>🧠 <strong>Remembers Context:</strong> Follow up without repeating yourself.</li>
+                            <li>📖 <strong>Learner’s Dream:</strong> Perfect for study or curiosity!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {/* CSS Animations */}
+            <style jsx>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideInLeft {
+                    from { opacity: 0; transform: translateX(-50px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                @keyframes bounceInUp {
+                    0% { opacity: 0; transform: translateY(50px); }
+                    60% { opacity: 1; transform: translateY(-10px); }
+                    100% { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes spin {
+                    from { transform: translate(-50%, -50%) rotate(0deg); }
+                    to { transform: translate(-50%, -50%) rotate(360deg); }
+                }
+                @keyframes pulse {
+                    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+                    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.3; }
+                    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+                }
+            `}</style>
+        </>
+    );
 }
