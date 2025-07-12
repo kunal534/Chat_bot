@@ -2,20 +2,18 @@ import { ChatWrapper } from "@/components/ChatWrapper";
 import { ragChat } from "@/lib/rag-chat";
 import { redis } from "@/lib/redis";
 import { cookies } from "next/headers";
+import { v4 as uuidv4 } from "uuid";
 
 interface PageProps {
   params: Promise<{ url: string[] }>;
 }
 
 function reconstructUrl({ url }: { url: string[] }) {
-  const decoded = decodeURIComponent(url.join("/"));
+  const raw = decodeURIComponent(url.join("/"));
 
-  // Ensure only one https:// is present
-  if (!/^https?:\/\//i.test(decoded)) {
-    return "https://" + decoded;
-  }
-
-  return decoded;
+  // Normalize it: remove trailing slashes and multiple protocols
+  const cleaned = raw.replace(/^https?:\/+/, ""); // remove leading protocol
+  return `https://${cleaned}`;
 }
 
 const Page = async ({ params }: PageProps) => {
@@ -30,13 +28,43 @@ const Page = async ({ params }: PageProps) => {
   const initialMessages = await ragChat.history.getMessages({ amount: 10, sessionId });
 
   if (!isAlreadyIndexed) {
-    await ragChat.context.add({
-      type: "html",
-      source: reconstructedUrl,
-      config: { chunkOverlap: 50, chunkSize: 200 },
-    });
+    try {
+      // Attempt to index the content
+      await ragChat.context.add({
+        type: "html",
+        source: reconstructedUrl,
+        config: { chunkSize: 500, chunkOverlap: 50 },
+      });
 
-    await redis.sadd("indexed-urls", reconstructedUrl);
+      await redis.sadd("indexed-urls", reconstructedUrl);
+    } catch (err) {
+      const error = err as Error;
+
+      let fallbackContent = "⚠️ This page could not be indexed. Try a simpler or public link.";
+      if (error.message.includes("Exceeded max batch write limit")) {
+        console.warn("Too many chunks, skipping indexing.");
+        fallbackContent = "⚠️ This page is too large to index. Try a simpler link.";
+        await redis.sadd("skipped-urls", reconstructedUrl);
+      } else if (error.message.includes("Missing vector data")) {
+        console.warn("No vectorizable content on the page.");
+        await redis.sadd("skipped-urls", reconstructedUrl);
+      } else {
+        console.error("Failed to index:", error);
+      }
+
+      return (
+        <ChatWrapper
+          sessionId={sessionId}
+          initialMessages={[
+            {
+              id: uuidv4(),
+              role: "system",
+              content: fallbackContent,
+            },
+          ]}
+        />
+      );
+    }
   }
 
   return <ChatWrapper sessionId={sessionId} initialMessages={initialMessages} />;

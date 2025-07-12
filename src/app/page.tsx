@@ -6,11 +6,16 @@ export default function Home() {
   const [input, setInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (input.trim()) {
-      window.location.href = `/https://${input.trim()}`;
-    }
-  };
+  e.preventDefault();
+  let sanitized = input.trim();
+
+  // Remove protocol if already included
+  sanitized = sanitized.replace(/^https?:\/\//, "");
+
+  // Route to clean version
+  window.location.href = `/https://${sanitized}`;
+};
+
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 py-8 bg-[#1a1a1a] text-[#E0D6C9] cursor-crosshair">

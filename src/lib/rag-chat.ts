@@ -1,4 +1,3 @@
-// lib/rag-chat.ts
 import { RAGChat, mistralai } from "@upstash/rag-chat";
 import { redis } from "./redis";
 
