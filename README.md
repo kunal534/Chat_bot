@@ -1,34 +1,34 @@
-# 🚀 Next.js RAG Chatbot (Meta Llama) 
+# 🚀 Next.js RAG Chatbot (Mistral AI)  
 
-A **Retrieval-Augmented Generation (RAG) Chatbot** built with **Next.js**, **LangChain.js**, **Redis**, and **Meta Llama**. This chatbot enhances responses by retrieving relevant contextual data before generating answers.   
-🔗 Project Publication: [Publication Link](https://app.readytensor.ai/publications/null-ElCDzXvDFNMs)
+A **Retrieval-Augmented Generation (RAG) Chatbot** built with **Next.js**, **LangChain.js**, **Redis**, and **Mistral AI**.  
+This chatbot enhances responses by retrieving relevant contextual data before generating answers.  
+
 ---
 
 ## 📂 Project Structure  
 
 ```plaintext
-📁 my-chatbot-project
+📁 Chat_bot
 │-- 📂 src
 │   ├── 📂 app
-│   │   ├── 📂 [...url]  # Dynamic route for chat sessions
-│   │   ├── 📂 api      # API routes
+│   │   ├── 📂 [...url]     # Dynamic route for chat sessions
+│   │   ├── 📂 api          # API routes
 │   │   ├── 📜 layout.tsx
 │   │   ├── 📜 page.tsx
-│   ├── 📂 components  # Reusable React components
-│   ├── 📂 lib         # Utility functions (RAG, Redis)
-│   ├── 📂 styles      # Styling (CSS, Tailwind, etc.)
+│   ├── 📂 components       # Reusable React components
+│   ├── 📂 lib              # Utility functions (RAG, Redis)
+│   ├── 📂 styles           # Styling (CSS, Tailwind, etc.)
 │-- .gitignore
 │-- package.json
 │-- next.config.js
 │-- README.md
+
 ```
-
----
-
 ## ⚙️ Installation & Setup  
 
 ### 1️⃣ Clone the repository  
-```sh
+
+``` sh
 git clone https://github.com/kunal534/Chat_bot.git 
 cd YOUR_REPO
 ```
@@ -41,8 +41,8 @@ npm install
 ### 3️⃣ Set up environment variables  
 Create a `.env.local` file and add:  
 ```env
-OPENAI_API_KEY=your_openai_api_key 
-REDIS_URL=your_redis_url 
+MISTRAL_API_KEY=your_mistral_api_key
+REDIS_URL=your_redis_url
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 ```
 
@@ -58,8 +58,9 @@ Your chatbot should now be running at **http://localhost:3000** 🎉
 
 - **Frontend:** Next.js, React  
 - **Backend:** Next.js API routes  
-- **AI Model:** Meta Llama for response generation  
-- **Database:** Redis for caching and session management  
+- **AI Model:** Mistral AI for response generation
+- **Database:** Redis for caching and session management
+- **Retrieval Layer:** LangChain.js (RAG pipeline)
 
 ---
 
@@ -78,4 +79,22 @@ Your chatbot should now be running at **http://localhost:3000** 🎉
 ### Deploy to Vercel  
 ```sh
 vercel
+```
+
+## Future Scope
+
+### Document Content Restriction Handling:
+
+```Currently, the chatbot cannot process files where content extraction is blocked due to:
+Digital Rights Management (DRM)
+Content Security Policy (CSP)
+Other access-control restrictions
+In such cases, the RAG pipeline cannot generate embeddings from the content, which limits contextual accuracy.
+```
+
+### Potential Enhancements:
+```
+Integrating OCR-based content extraction for protected documents (where legally permissible)
+Expanding parsers to handle non-standard file formats with embedded restrictions
+Support for proxy retrieval through secure, authenticated sessions
 ```
