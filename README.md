@@ -3,6 +3,8 @@
 A **Retrieval-Augmented Generation (RAG) Chatbot** built with **Next.js**, **LangChain.js**, **Redis**, and **Mistral AI**.  
 This chatbot enhances responses by retrieving relevant contextual data before generating answers.  
 
+
+Publication link : [Publication](https://app.readytensor.ai/publications/ciphor-bot-rag-based-web-chat-with-llama-and-redis-retention-ElCDzXvDFNMs)
 ---
 
 ## 📂 Project Structure  
