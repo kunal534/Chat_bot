@@ -77,7 +77,7 @@ export default function Home() {
         <div>
           📇{" "}
           <Link
-            href="https://your-portfolio-url.com"
+            href="https://kunal-uttam.netlify.app"
             className="underline hover:text-[#A0522D]"
             target="_blank"
           >
